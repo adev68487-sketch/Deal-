@@ -1,39 +1,170 @@
-<!DOCTYPE html> 
-<html lang="en"> 
-<head> 
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>AGameRepo - Glow Hockey</title> 
-    <link rel="stylesheet" href="style.css"> 
-</head> 
-<body> 
-    <div class="controls"> 
-        <button id="restart-btn" class="control-btn">Restart</button> 
-        <button id="pause-btn" class="control-btn">Pause</button> 
-    </div> 
-     
-    <div class="score-container"> 
-        <div class="score-section ai-score-section"> 
-            <div class="player-name">COMPUTER</div> 
-            <div class="score" id="aiScore">0</div> 
-        </div> 
-         
-        <div class="score-section player-score-section"> 
-            <div class="player-name">PLAYER</div> 
-            <div class="score" id="playerScore">0</div> 
-        </div> 
-    </div> 
-     
-    <div class="game-container"> 
-        <canvas id="gameCanvas"></canvas> 
-        <div class="game-status" id="gameStatus">Touch the ball to start!</div> 
-    </div> 
-     
-    <div class="game-over" id="gameOver"> 
-        <h2 id="winnerText">Game Over</h2> 
-        <button id="restart-game" class="restart-btn">Play Again</button> 
-    </div> 
-     
-    <script src="script.js"></script> 
-</body> 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:
+    radial-gradient(circle at 20px 20px, rgba(255,255,255,.18) 4px, transparent 5px),
+    radial-gradient(circle at 60px 60px, rgba(255,255,255,.12) 4px, transparent 5px),
+    linear-gradient(135deg,#17b83c,#10c24a);
+  background-size:80px 80px;
+}
+
+.wrapper{
+  width:94vw;
+  max-width:420px;
+  border:5px solid #fff;
+  border-radius:26px;
+  padding:26px 18px 34px;
+  position:relative;
+}
+
+/* IMAGE AVATAR */
+.avatar{
+  width:130px;
+  height:130px;
+  border-radius:50%;
+  overflow:hidden;
+  border:6px solid #eee;
+  position:absolute;
+  top:-65px;
+  left:50%;
+  transform:translateX(-50%);
+  box-shadow:0 10px 20px rgba(0,0,0,.18);
+  background:#fff;
+}
+
+.avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* Card */
+.card{
+  background:#fff;
+  border-radius:22px;
+  padding:82px 20px 28px;
+  margin-top:64px;
+  box-shadow:0 10px 24px rgba(0,0,0,.22);
+  position:relative;
+}
+
+.card:after{
+  content:"";
+  position:absolute;
+  bottom:-20px;
+  left:50%;
+  transform:translateX(-50%) rotate(45deg);
+  width:42px;
+  height:42px;
+  background:#fff;
+  border-radius:0 0 16px 0;
+}
+
+.title{
+  text-align:center;
+  font-size:22px;
+  color:#333;
+}
+
+.title strong{
+  display:block;
+  font-size:36px;
+  letter-spacing:1px;
+  margin-top:4px;
+}
+
+/* WhatsApp button */
+.whatsapp-btn{
+  margin-top:22px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  border:3px solid #25D366;
+  border-radius:50px;
+  padding:10px 18px 10px 10px;
+  cursor:pointer;
+  background:#fff;
+}
+
+.whatsapp-btn:active{
+  transform:scale(.98);
+}
+
+.whatsapp-icon{
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  background:#25D366;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 6px 14px rgba(0,0,0,.25);
+}
+
+.whatsapp-icon svg{
+  width:30px;
+  height:30px;
+  fill:#fff;
+}
+
+.phone-text{
+  font-size:18px;
+  color:#333;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+
+  <div class="avatar">
+    <img src="https://i.ibb.co/MkfwjYYk/Fortune-Online.png" alt="Avatar">
+  </div>
+
+  <div class="card">
+    <div class="title">
+      Contact Us On
+      <strong>WHATSAPP</strong>
+    </div>
+
+    <div class="whatsapp-btn" onclick="openWhatsApp()">
+      <div class="whatsapp-icon">
+        <svg viewBox="0 0 32 32">
+          <path d="M16 2.667c-7.363 0-13.333 5.97-13.333 13.333 0 2.35.617 4.65 1.79 6.69L2.667 29.333l6.813-1.787a13.29 13.29 0 0 0 6.52 1.71h.003c7.363 0 13.333-5.97 13.333-13.333S23.363 2.667 16 2.667zm7.84 18.507c-.33.933-1.917 1.787-2.637 1.9-.67.107-1.51.153-4.897-.99-4.357-1.437-7.163-6.207-7.377-6.5-.207-.293-1.767-2.353-1.767-4.493s1.12-3.193 1.517-3.63c.39-.437.853-.547 1.143-.547.29 0 .573.003.827.017.267.013.623-.1.973.743.35.84 1.19 2.917 1.293 3.127.103.21.17.457.033.75-.14.293-.21.457-.417.7-.207.243-.437.54-.623.723-.207.21-.423.437-.183.873.24.437 1.063 1.753 2.283 2.837 1.57 1.4 2.897 1.833 3.333 2.04.437.207.69.183.947-.11.257-.293 1.09-1.27 1.383-1.707.293-.437.587-.36.987-.21.4.15 2.52 1.187 2.953 1.403.433.217.72.323.827.503.103.18.103 1.04-.227 1.973z"/>
+        </svg>
+      </div>
+      <div class="phone-text">For Order Confirmation </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function openWhatsApp(){
+  const phone = "+917044666023"; // CHANGE NUMBER
+  const msg = encodeURIComponent("Hello Sir, I want to Order");
+  window.open("https://wa.me/" + phone + "?text=" + msg, "_blank");
+}
+</script>
+
+</body>
 </html>
