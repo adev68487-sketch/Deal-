@@ -25,6 +25,28 @@ body{
   background-size:80px 80px;
 }
 
+  .header-nav-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: #fff;
+  }
+
+  .header-nav-bar img {
+    width: 100%;
+    display: block;
+    transition: opacity 0.25s ease;
+  }
+
+  .content {
+    margin-top: 120px;
+    padding: 20px;
+    height: 2000px;
+    background: #f5f5f5;
+  }
+
 .wrapper{
   width:94vw;
   max-width:420px;
@@ -125,7 +147,7 @@ body{
 }
 
 .phone-text{
-  font-size:18px;
+  font-size:15px;
   color:#333;
 }
 </style>
@@ -135,6 +157,15 @@ body{
 
 <div class="wrapper">
 
+<header>
+  <div class="header-nav-bar">
+    <img
+      id="headerImage"
+      src="https://i.ibb.co/kYj3PkM/1000026197.jpg"
+      alt="Header Image"
+    >
+  </div>
+</header>
 
   <div class="avatar">
     <img src="https://i.ibb.co/MkfwjYYk/Fortune-Online.png" alt="Avatar">
@@ -152,7 +183,7 @@ body{
           <path d="M16 2.667c-7.363 0-13.333 5.97-13.333 13.333 0 2.35.617 4.65 1.79 6.69L2.667 29.333l6.813-1.787a13.29 13.29 0 0 0 6.52 1.71h.003c7.363 0 13.333-5.97 13.333-13.333S23.363 2.667 16 2.667zm7.84 18.507c-.33.933-1.917 1.787-2.637 1.9-.67.107-1.51.153-4.897-.99-4.357-1.437-7.163-6.207-7.377-6.5-.207-.293-1.767-2.353-1.767-4.493s1.12-3.193 1.517-3.63c.39-.437.853-.547 1.143-.547.29 0 .573.003.827.017.267.013.623-.1.973.743.35.84 1.19 2.917 1.293 3.127.103.21.17.457.033.75-.14.293-.21.457-.417.7-.207.243-.437.54-.623.723-.207.21-.423.437-.183.873.24.437 1.063 1.753 2.283 2.837 1.57 1.4 2.897 1.833 3.333 2.04.437.207.69.183.947-.11.257-.293 1.09-1.27 1.383-1.707.293-.437.587-.36.987-.21.4.15 2.52 1.187 2.953 1.403.433.217.72.323.827.503.103.18.103 1.04-.227 1.973z"/>
         </svg>
       </div>
-      <div class="phone-text">For Order Confirmation </div>
+      <div class="phone-text"><strong>To confirm <em>your order</em><br>please WhatsApp us</strong></div>
     </div>
   </div>
 
